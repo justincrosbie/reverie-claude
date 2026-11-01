@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "reverie-movies": {
+      "type": "http",
+      "url": "https://api.reveriemovies.com/mcp"
+    }
+  }
+}

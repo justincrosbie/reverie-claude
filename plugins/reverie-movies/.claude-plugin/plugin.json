@@ -1,0 +1,14 @@
+{
+  "name": "reverie-movies",
+  "displayName": "Reverie Movies",
+  "version": "1.0.0",
+  "description": "Make AI short films and music videos with Reverie Movies: plan scenes, keep characters and continuity across shots, render, edit and export the finished film.",
+  "author": {
+    "name": "Reverie Movies",
+    "email": "justin@reveriemovies.com",
+    "url": "https://reveriemovies.com"
+  },
+  "homepage": "https://reveriemovies.com/connect",
+  "repository": "https://github.com/justincrosbie/reverie-claude",
+  "keywords": ["video", "film", "music video", "filmmaking", "ai video", "mcp"]
+}

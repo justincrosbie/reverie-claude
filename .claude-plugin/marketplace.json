@@ -1,0 +1,15 @@
+{
+  "name": "reverie-movies",
+  "description": "Reverie Movies for Claude: make AI short films and music videos from a conversation.",
+  "owner": {
+    "name": "Reverie Movies",
+    "email": "justin@reveriemovies.com"
+  },
+  "plugins": [
+    {
+      "name": "reverie-movies",
+      "source": "./plugins/reverie-movies",
+      "description": "Plan, render and assemble AI short films and music videos with Reverie Movies, with continuity from shot to shot."
+    }
+  ]
+}
