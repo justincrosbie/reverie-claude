@@ -1,6 +1,6 @@
 ---
 name: reverie-filmmaking
-description: Make a short film, music video or other AI video with Reverie Movies. Covers which tools to call in what order, keeping characters and objects consistent across shots, continuous camera moves, checking each shot before building on it, choosing models, and getting the user's OK before anything costs credits. Use when the user wants to make, continue or fix a film with Reverie.
+description: Make a short film, music video or other AI video with Reverie Movies. Covers which tools to call in what order, keeping characters and objects consistent across shots, continuous camera moves, checking each shot before building on it, scoring the film with original music, choosing models, and getting the user's OK before anything costs credits. Use when the user wants to make, continue or fix a film with Reverie.
 ---
 
 # AI filmmaking with Reverie Movies
@@ -16,7 +16,8 @@ Reverie Movies turns an idea, a script or a song into a finished film. The film 
 4. `generate_character_image` for the main characters, so later shots keep their faces and clothes. Put the full appearance in the prompt: the portrait is made from the prompt you pass.
 5. `generate_clip_image` for each scene's opening shot.
 6. Render: `render_clip` per shot, or `render_chain` for a run of continuations.
-7. `export_movie`.
+7. Score it, if the user has no music of their own: `generate_music` (below).
+8. `export_movie`.
 
 **A script or story**: `ideate_concepts` with `source_material` and `fidelity: "faithful"` keeps its scenes, names and dialogue. Then as above.
 
@@ -44,6 +45,10 @@ Write each continuation so its camera keeps the direction and speed of the shot 
 - **Keep small subjects large in the frame**: "the camera stays close behind so the boat stays large in the foreground". Wide shots lose them.
 - **Restate a recurring object's look** in every prompt where it appears, especially when it wasn't in the previous shot's last frame.
 
+## Music
+
+`generate_music` composes an original score (or a song, with `instrumental: false`) and adds it as an audio track. Set `duration_seconds` to the film's runtime; a longer piece is cut to length with a fade. Write the brief like a composer's cue sheet: genre, instruments and mood, with sections timed to the film's moments from `get_project`'s shot start times: "[0:00-0:15] solo felt piano, curious. [0:15-0:35] pizzicato strings join, playful. [0:35-0:50] timpani and swelling strings, the plunge." Describe the sound; it refuses named artists and copyrighted lyrics. If the user has their own song, use it instead (`start_upload` + `add_file`).
+
 ## Choosing models
 
 - Leave `model` out unless the user asks; the quality tier picks one.
@@ -53,7 +58,7 @@ Write each continuation so its camera keeps the direction and speed of the shot 
 
 ## Spending
 
-Renders, images, enhancements, extensions, voice-overs, new transitions and export each work in two calls:
+Renders, images, enhancements, extensions, voice-overs, music, new transitions and export each work in two calls:
 
 1. Call without `confirm`. Nothing is spent; you get a quote (`credits_required`, `what`, `quote_id`).
 2. Tell the user what it is and what it costs, and wait for a clear yes.
