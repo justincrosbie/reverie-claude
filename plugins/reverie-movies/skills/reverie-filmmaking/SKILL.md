@@ -49,6 +49,21 @@ Write each continuation so its camera keeps the direction and speed of the shot 
 
 `generate_music` composes an original score (or a song, with `instrumental: false`) and adds it as an audio track. Set `duration_seconds` to the film's runtime; a longer piece is cut to length with a fade. Write the brief like a composer's cue sheet: genre, instruments and mood, with sections timed to the film's moments from `get_project`'s shot start times: "[0:00-0:15] solo felt piano, curious. [0:15-0:35] pizzicato strings join, playful. [0:35-0:50] timpani and swelling strings, the plunge." Describe the sound; it refuses named artists and copyrighted lyrics. If the user has their own song, use it instead (`start_upload` + `add_file`).
 
+## Shape and sound
+
+- **Set the shape when you create the project**: `create_project` with `aspect_ratio: "9:16"` for TikTok, Reels and Shorts. It defaults to 16:9 landscape. Quotes state each shot's shape and whether it has sound.
+- **Shots are silent unless you pass `with_audio: true`** (50% more). Ask whether the user wants sound before quoting.
+
+## Keeping a character identical
+
+For a real person, a costume or a mascot that must never change:
+
+1. Give them a reference: a clean, front-on, full-body image, ideally a real photo, as the character's portrait (`attach_image`).
+2. Render on a model that takes character references: **kling-4.0** or **veo-3.1-generate-001**. Kling 3.0 Pro and the Veo Fast and Lite models ignore them. The quote's `notes` say when references won't be used.
+3. A continuation starts from the shot before and sends no references (except on kling-4.0), so any drift carries forward. Give continuations an end frame showing the character.
+4. Keep them large in frame, describe the costume the same way in every prompt, and spell out what must not change ("he never speaks, his mouth never moves").
+5. Check each shot with `view_shot_frames` before building on it.
+
 ## Choosing models
 
 - Leave `model` out unless the user asks; the quality tier picks one.
