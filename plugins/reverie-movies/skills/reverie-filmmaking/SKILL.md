@@ -65,7 +65,10 @@ Learned making real films here, most of them from what those films wasted.
 
 **Keeping it consistent**
 - Check every new still against the characters' portraits and the shots either side: clothes, hair, props. A wardrobe change between two stills shows as a costume change at the cut.
-- Name the characters for each render, or set them on the shot, so their portraits guide it.
+- Set the shot's characters before making its still, so the still is made from their portraits. A still like that carried their faces through the shot on every model we tested, even when someone left the frame and came back.
+- Only kling-4.0 uses the still and the portraits together. On Veo and Wan, naming characters for a render swaps the still for a new picture made from the portraits; leave them out to keep the still.
+- Characters that must stay identical across many shots need a premium model such as kling-4.0. On a free account, Wan 3.0 from a still made with the characters does best.
+- Someone who enters partway through a continuation (not in its first frame) gets an invented face and clothes. Whenever a prompt brings a person in partway through, offer an end frame showing them in the same reply as the render's quote.
 
 **Sound**
 - Shots with their own sound keep it in the export, mixed with the music and voice tracks. Mute a shot's own sound (update_clip with audio_muted) where a track replaces it.
@@ -88,18 +91,31 @@ Learned making real films here, most of them from what those films wasted.
 For a real person, a costume or a mascot that must never change:
 
 1. Give them a reference: a clean, front-on, full-body image, ideally a real photo, as the character's portrait (`attach_image`).
-2. Render on a model that takes character references: **kling-4.0** or **veo-3.1-generate-001**. Kling 3.0 Pro and the Veo Fast and Lite models ignore them. The quote's `notes` say when references won't be used.
-3. A continuation starts from the shot before and sends no references (except on kling-4.0), so any drift carries forward. Give continuations an end frame showing the character.
-4. Keep them large in frame, describe the costume the same way in every prompt, and spell out what must not change ("he never speaks, his mouth never moves").
-5. Check each shot with `view_shot_frames` before building on it.
+2. Set the shot's characters (`create_clip` with `characters`) before making its still: the still is then made from their portraits, and it carries their faces into the video on any model, even when someone leaves the frame and comes back.
+3. Render on **kling-4.0**, the only model that uses the still and the portraits together. On Veo and Wan, naming `characters` in `render_clip` replaces the still with a new picture made from the portraits; to keep the still, leave them out. The quote's `notes` say which will happen.
+4. A continuation starts from the shot before and sends no portraits (except on kling-4.0), so any drift carries forward. Give continuations an end frame showing the character.
+5. Keep them large in frame, describe the costume the same way in every prompt, and spell out what must not change ("he never speaks, his mouth never moves").
+6. Check each shot with `view_shot_frames` before building on it.
 
-## Choosing models
+## Choosing a model for the shot
 
-- Leave `model` out unless the user asks; the quality tier picks one.
-- **Kling 4** (`kling-4.0`, 3–30 seconds, sound always on) is the model for people talking: each character keeps their face and speaks in their own voice, and it cuts within a take on its own.
-- **Kling** holds people, groups and continuity best. Use it for shots with people, wide group shots, and shots whose end framing differs from their start.
-- **Veo** models are cheaper, but they add strangers to wide group shots, blend very different framings into a double exposure, lose small subjects in wide shots, and refuse to render children. Veo 3.1 Lite is good for single subjects that stay in a similar framing.
-- Free accounts render on the included models. `get_credit_balance` reports `premium_unlocked`. Mention a premium model at most once, and only when it would clearly serve the shot.
+Leave `model` out unless the user asks, or the shot is one of these. When you pick one, say why in a line, with the price from the quote.
+
+| The shot | Use | Why |
+|---|---|---|
+| People talking | `kling-4.0` | Each character keeps their face and speaks in their own voice. 3–30 s, sound always on. |
+| Characters who must look identical across many shots | `kling-4.0` | It uses the shot's still and the portraits together. |
+| Characters, on a free account | `wan-3.0` from a still made with the shot's characters, without naming them in the render | Included at 480p and 720p, 2–30 s, sound at no extra cost. The still carries their faces; named, Wan swaps the still for a weaker likeness. |
+| A character with no still yet | `veo-3.1-generate-001` with `characters` | The best likeness from portraits alone, though it invents the setting. |
+| A wide shot of a group | Kling | Veo adds strangers to groups. |
+| Children | Kling | Veo refuses to render children. |
+| An end frame framed unlike the start | Kling | Veo blends the two into a double exposure. |
+| A single subject in similar framing, cheaply | `veo-3.1-lite-generate-001` | The cheapest; it takes no portraits, so start from a good still. |
+| A long take without dialogue | `wan-3.0`, `kling-4.0`, or `seedance-2.5` for anything but real people | Up to 30 s. Seedance turns photorealistic people away. |
+
+How each model uses characters (tested on the same shot, November 2026): **kling-4.0** keeps the still and adds the portraits. **veo-3.1-generate-001** (best likeness), **veo-3.1-fast-generate-001** and **wan-3.0** (weakest likeness) use the portraits *instead of* the still when you name characters. **kling-3.0**, **veo-3.1-lite** and **MiniMax** take no portraits: the still carries the faces.
+
+Free accounts render on the included models; `get_credit_balance` reports `premium_unlocked`. Say plainly, once, that characters identical across shots need a premium model such as Kling 4, and recommend Wan 3.0 from a still for the rest. Never press.
 
 ## Spending
 
