@@ -65,6 +65,7 @@ Learned making real films here, most of them from what those films wasted.
 
 **Keeping it consistent**
 - Check every new still against the characters' portraits and the shots either side: clothes, hair, props. A wardrobe change between two stills shows as a costume change at the cut.
+- Looking at a shot with characters (looking at its frames or its still) also returns `faces`: whether each character still matches their portrait, and what differs. On drift, fix the still (or make it again with the characters set) before rendering from it or continuing from the shot. It's reliable on clothes, hair and accessories; for subtle face changes, look yourself as well.
 - Set the shot's characters before making its still, so the still is made from their portraits. A still like that carried their faces through the shot on every model we tested, even when someone left the frame and came back.
 - Only kling-4.0 uses the still and the portraits together. On Veo and Wan, naming characters for a render swaps the still for a new picture made from the portraits; leave them out to keep the still.
 - Characters that must stay identical across many shots need a premium model such as kling-4.0. On a free account, Wan 3.0 from a still made with the characters does best.
