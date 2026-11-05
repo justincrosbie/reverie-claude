@@ -23,6 +23,8 @@ Reverie Movies turns an idea, a script or a song into a finished film. The film 
 
 **A song (music video)**: `create_project`; add the song with `start_upload` + `add_file` (`use_as: "audio_track"`); plan shots to its length with `create_scene` and `create_clip`; render; trim with `update_clip` (`trim_end_seconds`) so cuts land on the beat; then `lip_sync_clip` each singing shot **last**, because lip-sync is matched to the shot's place in the song; `export_movie`.
 
+**A scene with dialogue**: settle the lines first. Voice each with `generate_voice_over` in the voice the character will have, and listen with the user. Set each speaker's voice from a 5–30 second sample (`set_character_voice`), then render the exchange on `kling-4.0` with the lines quoted in the prompt. See *Lessons from finished films* below.
+
 **An existing film**: `list_projects` → `get_project`, then edit, render what's missing, or export.
 
 ## Continuity
@@ -44,6 +46,33 @@ Write each continuation so its camera keeps the direction and speed of the shot 
 - **A small subject that ends a shot as a blur** (a paper boat lost in a waterfall) gets reinvented by the next shot, sometimes as something else entirely. Give the next shot an end frame made from the subject's portrait, and prompt the camera to find the subject first.
 - **Keep small subjects large in the frame**: "the camera stays close behind so the boat stays large in the foreground". Wide shots lose them.
 - **Restate a recurring object's look** in every prompt where it appears, especially when it wasn't in the previous shot's last frame.
+
+## Lessons from finished films
+
+Learned making real films here, most of them from what those films wasted.
+
+**Before you spend**
+- Settle the script before any video. For dialogue, voice the lines first (a voice-over for each, in the voice the character will have, about a credit a line) and listen with the user. A line that doesn't land costs a credit to fix now and a whole scene's render later.
+- Prove a doubtful idea with the cheapest thing that shows it: a still before a render, a short render before a long one. A continuation is the exception: it starts from the shot before and never needs a still.
+- Decide which shots continue which before rendering. Two shots in a row that start from the same still jump at the cut: make the second a continuation, so it starts on the first one's last frame.
+
+**Dialogue**
+- For people talking, use kling-4.0 with each speaker's voice set from a 5–30 second sample (set_character_voice). Render the exchange as one take of up to 30 seconds, with the lines quoted in the prompt and who says each. It cuts to close-ups and inserts on its own, which plays far less stiffly than a locked two-shot.
+- Kling 4 keeps the cast and their voices on continuations too, so a long scene can run as a chain of takes.
+- Direct the delivery sparingly: one or two specific pauses where they matter. Asking for long pauses everywhere makes every line slow and wooden.
+- Lip-syncing a silent shot to a recorded line is the fallback for other models: the heads stay still and it rarely looks seamless. If you use it, render the speaker listening with a closed mouth, and check the lip-synced version is the one in use before exporting.
+- An exact repeat (a loop, a callback, a glitch) has to reuse the same take. A new generation never says it the same way twice.
+
+**Keeping it consistent**
+- Check every new still against the characters' portraits and the shots either side: clothes, hair, props. A wardrobe change between two stills shows as a costume change at the cut.
+- Name the characters for each render, or set them on the shot, so their portraits guide it.
+
+**Sound**
+- Shots with their own sound keep it in the export, mixed with the music and voice tracks. Mute a shot's own sound (update_clip with audio_muted) where a track replaces it.
+- Keep a score low (about 0.2–0.3 volume) under dialogue, and let it stop or thin out for silences.
+
+**Before calling it finished**
+- Export and watch the whole film: every join, every line. Problems that hide in single shots show up in the cut.
 
 ## Music
 
@@ -67,13 +96,14 @@ For a real person, a costume or a mascot that must never change:
 ## Choosing models
 
 - Leave `model` out unless the user asks; the quality tier picks one.
+- **Kling 4** (`kling-4.0`, 3–30 seconds, sound always on) is the model for people talking: each character keeps their face and speaks in their own voice, and it cuts within a take on its own.
 - **Kling** holds people, groups and continuity best. Use it for shots with people, wide group shots, and shots whose end framing differs from their start.
 - **Veo** models are cheaper, but they add strangers to wide group shots, blend very different framings into a double exposure, lose small subjects in wide shots, and refuse to render children. Veo 3.1 Lite is good for single subjects that stay in a similar framing.
 - Free accounts render on the included models. `get_credit_balance` reports `premium_unlocked`. Mention a premium model at most once, and only when it would clearly serve the shot.
 
 ## Spending
 
-Renders, images, enhancements, extensions, voice-overs, music, new transitions and export each work in two calls:
+Renders, images, enhancements, extensions, voice-overs, character voices, music, new transitions and export each work in two calls:
 
 1. Call without `confirm`. Nothing is spent; you get a quote (`credits_required`, `what`, `quote_id`).
 2. Tell the user what it is and what it costs, and wait for a clear yes.
