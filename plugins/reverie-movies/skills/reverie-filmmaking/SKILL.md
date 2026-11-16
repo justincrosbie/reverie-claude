@@ -21,11 +21,22 @@ Reverie Movies turns an idea, a script or a song into a finished film. The film 
 
 **A script or story**: `ideate_concepts` with `source_material` and `fidelity: "faithful"` keeps its scenes, names and dialogue. Then as above.
 
-**A song (music video)**: `create_project`; add the song with `start_upload` + `add_file` (`use_as: "audio_track"`); plan shots to its length with `create_scene` and `create_clip`; render; trim with `update_clip` (`trim_end_seconds`) so cuts land on the beat; then `lip_sync_clip` each singing shot **last**, because lip-sync is matched to the shot's place in the song; `export_movie`.
+**A song (music video)**: `create_project`; add the song with `start_upload` + `add_file` (`use_as: "audio_track"`); plan shots to its length with `create_scene` and `create_clip`; render; trim with `update_clip` (`trim_end_seconds`) so cuts land on the beat; then `lip_sync_clip` each singing shot **last**, because lip-sync is matched to the shot's place in the song; `export_movie`. A whole song costs more than most users have at first: start with a sample (below).
 
 **A scene with dialogue**: settle the lines first. Voice each with `generate_voice_over` in the voice the character will have, and listen with the user. Set each speaker's voice from a 5–30 second sample (`set_character_voice`), then render the exchange on `kling-4.0` with the lines quoted in the prompt. See *Lessons from finished films* below.
 
 **An existing film**: `list_projects` → `get_project`, then edit, render what's missing, or export.
+
+## A sample first
+
+Most users can't pay for a whole film before they've seen any of it, and a new account's credits don't cover a whole song. Show them part of it first:
+
+1. Plan the whole film (free), then quote the first 20–30 seconds of shots on the preview model and say what the whole film would cost against their credits.
+2. Render those shots and check each with `view_shot_frames`.
+3. `export_movie`: a partly rendered film exports as a sample, the rendered shots with their stretch of the song. Give the user the finished `video_url` to watch.
+4. Then quote the rest. If it's more than they have, say once which credit pack covers it.
+
+Make the musical and technical calls yourself (where cuts land, which model, how long each shot runs) and tell the user what you chose. Don't ask them to check beat grids or timelines.
 
 ## Continuity
 
@@ -82,6 +93,8 @@ Learned making real films here, most of them from what those films wasted.
 
 `generate_music` composes an original score (or a song, with `instrumental: false`) and adds it as an audio track. Set `duration_seconds` to the film's runtime; a longer piece is cut to length with a fade. Write the brief like a composer's cue sheet: genre, instruments and mood, with sections timed to the film's moments from `get_project`'s shot start times: "[0:00-0:15] solo felt piano, curious. [0:15-0:35] pizzicato strings join, playful. [0:35-0:50] timpani and swelling strings, the plunge." Describe the sound; it refuses named artists and copyrighted lyrics. If the user has their own song, use it instead (`start_upload` + `add_file`).
 
+Uploading the user's files: `start_upload` returns an `upload_url` to PUT the bytes to. If you can't send bytes yourself, give the user its `upload_page_url` as a link: it opens a page where they choose the file, with no sign-in. Give only that link: a file attached to the chat doesn't reach Reverie (except an image, through `attach_image`). When they say it's done, call `add_file`. Ask for one file at a time, saying which it is ("your song", "a photo of you").
+
 ## Shape and sound
 
 - **Set the shape when you create the project**: `create_project` with `aspect_ratio: "9:16"` for TikTok, Reels and Shorts. It defaults to 16:9 landscape. Quotes state each shot's shape and whether it has sound.
@@ -93,7 +106,7 @@ For a real person, a costume or a mascot that must never change:
 
 1. Give them a reference: a clean, front-on, full-body image, ideally a real photo, as the character's portrait (`attach_image`).
 2. Set the shot's characters (`create_clip` with `characters`) before making its still: the still is then made from their portraits, and it carries their faces into the video on any model, even when someone leaves the frame and comes back.
-3. Render on **kling-4.0**, the only model that uses the still and the portraits together. On Veo and Wan, naming `characters` in `render_clip` replaces the still with a new picture made from the portraits; to keep the still, leave them out. The quote's `notes` say which will happen.
+3. Render on **kling-4.0**, the only model that uses the still and the portraits together. On Veo and Wan, naming `characters` in `render_clip` renders from a new picture made from the portraits instead of the still (the still stays on the shot); to render from the still, leave them out. The quote's `notes` say which will happen.
 4. A continuation starts from the shot before and sends no portraits (except on kling-4.0), so any drift carries forward. Give continuations an end frame showing the character.
 5. Keep them large in frame, describe the costume the same way in every prompt, and spell out what must not change ("he never speaks, his mouth never moves").
 6. Check each shot with `view_shot_frames` before building on it.
@@ -128,7 +141,7 @@ Renders, images, enhancements, extensions, voice-overs, character voices, music,
 
 A quote covers only the call it was made for, lasts an hour and works once. If a confirm is refused with `quote_required`, quote again. Never confirm on your own judgment. A render is charged only when it finishes; a blocked or failed one costs nothing. If a suitable image is already in the conversation, offer `attach_image` (free) before quoting a generated one.
 
-Renders take minutes. Poll `get_render_job_status` with all outstanding job ids at once, and don't say a shot is done until its job is.
+Renders take minutes. Poll `get_render_job_status` with all outstanding job ids at once, and don't say a shot is done until its job is. When a shot or an export is done, give the user its `video_url` so they can watch it right there.
 
 ## What Reverie can't do
 
