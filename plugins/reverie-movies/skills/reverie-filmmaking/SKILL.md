@@ -53,6 +53,7 @@ Write each continuation so its camera keeps the direction and speed of the shot 
 ## Shot craft (learned making real films)
 
 - **Look at every shot before building on it.** Call `view_shot_frames` when a render finishes. Check the characters and objects, that nothing unexpected has appeared, and that a continuation picks up where the shot before ended.
+- **When the user reacts to a shot** ("love it", "her face changed", "there are strangers in it"), record it with `rate_shot` (free). For a problem it returns the usual fix: offer it in a sentence. A render it leads to is quoted like any other.
 - **Someone entering partway through a continuation** gets invented unless you give that shot an end frame showing them (`generate_clip_image` with `use_as: "end_frame"`).
 - **A small subject that ends a shot as a blur** (a paper boat lost in a waterfall) gets reinvented by the next shot, sometimes as something else entirely. Give the next shot an end frame made from the subject's portrait, and prompt the camera to find the subject first.
 - **Keep small subjects large in the frame**: "the camera stays close behind so the boat stays large in the foreground". Wide shots lose them.
