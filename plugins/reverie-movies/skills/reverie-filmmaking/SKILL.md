@@ -21,7 +21,7 @@ Reverie Movies turns an idea, a script or a song into a finished film. The film 
 
 **A script or story**: `ideate_concepts` with `source_material` and `fidelity: "faithful"` keeps its scenes, names and dialogue. Then as above.
 
-**A song (music video)**: `create_project`; add the song with `start_upload` + `add_file` (`use_as: "audio_track"`); plan shots to its length with `create_scene` and `create_clip`; render; trim with `update_clip` (`trim_end_seconds`) so cuts land on the beat; then `lip_sync_clip` each singing shot **last**, because lip-sync is matched to the shot's place in the song; `export_movie`. A whole song costs more than most users have at first: start with a sample (below).
+**A song (music video)**: `create_project`; add the song with `add_file` (`use_as: "audio_track"`); `listen_to_song` (free) to hear its mood, sections, big moments and beat, and tell the user in a couple of sentences what you hear; plan shots to it with `create_scene` and `create_clip`, a new scene at each section; render; `fit_cuts_to_music` so every cut lands on the beat; then `lip_sync_clip` each singing shot **last**, because lip-sync is matched to the shot's place in the song; `export_movie`. A whole song costs more than most users have at first: start with a sample (below).
 
 **A scene with dialogue**: settle the lines first. Voice each with `generate_voice_over` in the voice the character will have, and listen with the user. Set each speaker's voice from a 5–30 second sample (`set_character_voice`), then render the exchange on `kling-4.0` with the lines quoted in the prompt. See *Lessons from finished films* below.
 
@@ -93,7 +93,7 @@ Learned making real films here, most of them from what those films wasted.
 
 `generate_music` composes an original score (or a song, with `instrumental: false`) and adds it as an audio track. Set `duration_seconds` to the film's runtime; a longer piece is cut to length with a fade. Write the brief like a composer's cue sheet: genre, instruments and mood, with sections timed to the film's moments from `get_project`'s shot start times: "[0:00-0:15] solo felt piano, curious. [0:15-0:35] pizzicato strings join, playful. [0:35-0:50] timpani and swelling strings, the plunge." Describe the sound; it refuses named artists and copyrighted lyrics. If the user has their own song, use it instead (`start_upload` + `add_file`).
 
-Uploading the user's files: `start_upload` returns an `upload_url` to PUT the bytes to. If you can't send bytes yourself, give the user its `upload_page_url` as a link: it opens a page where they choose the file, with no sign-in. Give only that link: a file attached to the chat doesn't reach Reverie (except an image, through `attach_image`). When they say it's done, call `add_file`. Ask for one file at a time, saying which it is ("your song", "a photo of you").
+Uploading the user's files: `start_upload` returns an `upload_url` to PUT the bytes to. If you can't send bytes yourself, give the user its `upload_page_url` as a link: it opens a page where they choose the file, with no sign-in. Give only that link. Where the chat app passes attached files to tools (ChatGPT does), a file the user attached goes straight to `add_file` as `file`, or to `attach_image` as `image`, with no upload page. When they say it's done, call `add_file`. Ask for one file at a time, saying which it is ("your song", "a photo of you").
 
 ## Shape and sound
 
