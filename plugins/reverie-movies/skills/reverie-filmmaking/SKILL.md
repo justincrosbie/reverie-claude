@@ -7,13 +7,42 @@ description: Make a short film, music video or other AI video with Reverie Movie
 
 Reverie Movies turns an idea, a script or a song into a finished film. The film is planned as scenes and shots, rendered shot by shot with AI video models, and exported as one video. Everything happens in the user's Reverie account, so they can keep editing at reveriemovies.com. Planning and editing are free; anything that spends credits is quoted first.
 
-## Pick the workflow from what the user has
+## The plan: every film, step by step
+
+Every film follows the same plan, whatever kind it is. Most people here have never made a film: they don't know the steps, so you lead them through. Know which step you're on (from what's in the project and what's been said), never redo a finished one, and at every step do the free work yourself, then end by saying where they are in the plan, what comes next, and one question they can answer in a word, with the likely answers offered as choices. Never hand them a form, and never ask them for prompts, shot lists, timings or models: those are yours.
+
+1. **What they have.** A song, a script, an idea, or nothing yet. If what they've said doesn't make it clear, ask, with those four as the choices. It decides the kind of film (below).
+2. **The source.** It's their film: plan nothing until they've given or chosen an idea.
+   - A song: have them send it, listen to it, and say in two sentences what you hear: the mood, the tempo, where it lifts, and where the singing is.
+   - A script: have them paste or send it, read it, and say back in a line what you found: who's in it, where it happens, whether people speak, and about how long it runs.
+   - An idea: take it in their words, however short ("me floating through sci-fi worlds" is enough).
+   - Nothing yet (or "a music video for my song", which isn't an idea): ask whether they have an idea or would like some. When they want some, pitch three, A, B and C, one line each (drawn from their song when there is one), and let them pick one, mix them or change one.
+3. **The shape.** Propose it all at once, from the source, as one line they can change: how long (a song or a script's lines set it), widescreen or vertical (vertical for a phone or social post), whether people speak, and the look and genre ("about 90 seconds, widescreen, two speaking parts, a moody thriller: change anything?"). Their yes settles it. When they've said to just make it, or what they've sent settles it already ("a two-minute film", a script with its times marked), decide the rest yourself, say it in a line, and go straight on.
+4. **The cast.** Everyone who appears, from the script or the idea: don't ask for what the script already says. A real person ("me", "my sister") needs a clear photo of their face before any picture is made, or every picture shows a stranger. Someone made up gets a portrait before any still, so they look the same in every shot. If nobody's in it, say so and move on.
+5. **The voices** (only when people speak). Every speaking part has its voice before any line is voiced. Offer both: they send a clip of 5 to 30 seconds of just that person speaking (ask once whose voice it is: theirs, or someone who's agreed), or you make one from a described voice ("a warm, gravelly old sailor") and play it to them. Give it to the character, so they speak in it in every shot.
+6. **The plan.** Every scene, then every shot, to the film's end, in one go (planning is free), timed to what drives the film (below). Then say in a line how many shots, how long they run, and one line per scene.
+7. **The lines** (dialogue or narration). Voice every line first, in its speaker's voice, and listen with them, before any video: a line fixed now costs a credit; fixed after the render, it costs the scene.
+8. **A sample.** A short stretch made start to finish on one yes (the first scene; for a music video its best 25 to 30 seconds, usually the chorus), so they see it working before paying for it all. Say what the whole film costs against their credits.
+9. **The rest of the film**, on one yes, once they've seen the sample and have the credits.
+10. **The finished film.** Put it together, check it end to end, and give it to them to watch and download. Then offer to redo any shot they don't like.
+
+**Kinds of film.** The kind is what drives the film, and it changes some steps. Genre (action, comedy, horror…) is part of the look, not the kind.
+- **Music video**: from their song, which sets the length and the cuts (on the beat). No voices or lines steps: shots sung on camera get lip-sync to the song, on the same card as their videos, without being asked.
+- **Story with dialogue** (a drama, a comedy, two people talking): from a script or an idea. The lines drive it, so the voices and the lines come before any video. A talking scene is one take per exchange, with the lines quoted and each speaker's voice set.
+- **Story without dialogue** (action, a mood piece, a trailer): from an idea. Its length drives it (ask, or offer 30 to 60 seconds). More motion and quicker cuts for action, slower and wider for a mood. Offer a score.
+- **Narrated** (a documentary, an explainer, a story told over pictures): from a script or an idea. The narration drives it: write it with them, voice it (the narrator's voice is step 5), and cut the shots to it.
+- **Ad or social post**: from a product or a message. Its format drives it: vertical, 15 to 30 seconds, ending on the product or a line of text. The whole ad is the sample.
+
+## Doing each step with these tools
+
+Pick the workflow from what the user has, and lead them through the plan above with it.
+
 
 **An idea, or nothing yet**
 1. `ideate_concepts`: show the three concept cards (A/B/C) and let the user react. Don't ask for a finished idea first.
 2. `refine_plan` for changes, then `advance_plan_stage` (with `choose_concept` at the concept stage): concept → story bible → storyboard.
 3. `create_project_from_plan` (free): the storyboard becomes a project with characters, scenes and shots.
-4. `generate_character_image` for the main characters, so later shots keep their faces and clothes. Put the full appearance in the prompt: the portrait is made from the prompt you pass.
+4. `generate_character_image` for every character who appears in a shot, before any of their shots' stills, so every shot keeps their faces and clothes. Put the full appearance in the prompt: the portrait is made from the prompt you pass. A still made for someone with no portrait invents them afresh, and they look different in every shot (the still's quote lists them under `portraits_missing`).
 5. `generate_clip_image` for each scene's opening shot.
 6. Render: `render_clip` per shot, or `render_chain` for a run of continuations.
 7. Score it, if the user has no music of their own: `generate_music` (below).
@@ -21,7 +50,7 @@ Reverie Movies turns an idea, a script or a song into a finished film. The film 
 
 **A script or story**: `ideate_concepts` with `source_material` and `fidelity: "faithful"` keeps its scenes, names and dialogue. Then as above.
 
-**A song (music video)**: `create_project`; add the song with `add_file` (`use_as: "audio_track"`); `listen_to_song` (free) to hear its mood, sections, big moments and beat, and tell the user in a couple of sentences what you hear; plan shots to it with `create_scene` and `create_clip`, a new scene at each section; render; `fit_cuts_to_music` so every cut lands on the beat; then `lip_sync_clip` each singing shot **last**, because lip-sync is matched to the shot's place in the song; `export_movie`. A whole song costs more than most users have at first: start with a sample (below).
+**A song (music video)**: `create_project`; add the song with `add_file` (`use_as: "audio_track"`); `listen_to_song` (free) to hear its mood, sections, big moments and beat, and tell the user in a couple of sentences what you hear; plan shots to it with `create_scene` and `create_clip`, a new scene at each section; give everyone in the shots a portrait before any still (`attach_image` with a photo of a real person, `generate_character_image` for one they've made up); render; `fit_cuts_to_music` so every cut lands on the beat; then `lip_sync_clip` each singing shot **last**, because lip-sync is matched to the shot's place in the song; `export_movie`. A whole song costs more than most users have at first: start with a sample (below).
 
 **A scene with dialogue**: settle the lines first. Voice each with `generate_voice_over` in the voice the character will have, and listen with the user. Set each speaker's voice from a 5–30 second sample (`set_character_voice`), then render the exchange on `kling-4.0` with the lines quoted in the prompt. See *Lessons from finished films* below.
 
